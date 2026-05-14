@@ -1,7 +1,6 @@
 #pragma once
 #include <Arduino.h>
 
-#include "esp_adc_cal.h"
 #include "esphome/components/display/display_buffer.h"
 #include "esphome/components/display/display_color_utils.h"
 #include "esphome/core/component.h"
@@ -11,7 +10,7 @@
 namespace esphome {
 namespace lilygo_t5_47 {
 
-class LilygoT547Display : public PollingComponent, public display::DisplayBuffer {
+class LilygoT547Display : public display::DisplayBuffer {
  public:
   float get_setup_priority() const override;
 
@@ -23,7 +22,7 @@ class LilygoT547Display : public PollingComponent, public display::DisplayBuffer
   int get_height_internal() override;
 
   void fill(Color color) override;
-  
+
   void on_shutdown() override;
 
   void set_full_update_every(uint32_t value) { this->full_update_every_ = value; }
@@ -42,7 +41,7 @@ class LilygoT547Display : public PollingComponent, public display::DisplayBuffer
   void power_on();
   void power_off();
 
-#if ESPHOME_VERSION_CODE >= VERSION_CODE(2022,6,0)
+#if ESPHOME_VERSION_CODE >= VERSION_CODE(2022, 6, 0)
   display::DisplayType get_display_type() override { return display::DisplayType::DISPLAY_TYPE_BINARY; }
 #endif
 
