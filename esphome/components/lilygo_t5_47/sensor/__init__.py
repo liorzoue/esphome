@@ -1,11 +1,8 @@
 import esphome.codegen as cg
-import esphome.config_validation as cv
 from esphome.components import sensor
-from esphome.const import (
-    CONF_ID,
-    STATE_CLASS_NONE,
-    ENTITY_CATEGORY_DIAGNOSTIC,
-)
+import esphome.config_validation as cv
+from esphome.const import CONF_ID, ENTITY_CATEGORY_DIAGNOSTIC, STATE_CLASS_NONE
+
 from .. import lilygo_t5_47_ns
 
 LilygoT547Sensor = lilygo_t5_47_ns.class_(
@@ -32,7 +29,9 @@ async def to_code(config):
     await cg.register_component(var, config)
     await sensor.register_sensor(var, config)
 
-    cg.add_library("https://github.com/ashald/platformio-epdiy-monochrome.git", None)
+    cg.add_library(
+        "https://github.com/daernsinstantfortress/platformio-epdiy-monochrome.git", None
+    )
 
     cg.add_build_flag("-DCONFIG_EPD_DISPLAY_TYPE_ED047TC1")
     cg.add_build_flag("-DCONFIG_EPD_BOARD_REVISION_LILYGO_T5_47")

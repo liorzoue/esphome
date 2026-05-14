@@ -1,6 +1,7 @@
 #include "lilygo_t5_47_display.h"
 
 #include "esphome/core/log.h"
+#include <inttypes.h>
 #include <string.h>
 extern "C" {
 #include "eink.h"
@@ -31,11 +32,12 @@ void LilygoT547Display::fill(Color color) { eink_buffer_set(fb, convert_color(co
 void LilygoT547Display::setup() {
   eink_init();
 
-  if (esp_sleep_get_wakeup_cause() == ESP_SLEEP_WAKEUP_UNDEFINED || full_update_countdown_ < 0 || full_update_countdown_ >= this->full_update_every_) {
+  if (esp_sleep_get_wakeup_cause() == ESP_SLEEP_WAKEUP_UNDEFINED ||
+      full_update_countdown_ >= this->full_update_every_) {
     ESP_LOGD(TAG, "Resetting periodic full update countdown to 0.");
     full_update_countdown_ = 0;
   } else {
-    ESP_LOGD(TAG, "Restored periodic full update countdown to %u.", full_update_countdown_);
+    ESP_LOGD(TAG, "Restored periodic full update countdown to %" PRIu32 ".", full_update_countdown_);
   }
 }
 
@@ -48,12 +50,12 @@ void LilygoT547Display::flush_screen_changes() {
   eink_power_on();
 
   if (this->full_update_every_ > 0) {
-    ESP_LOGD(TAG, "Periodic full update countdown %u.", full_update_countdown_);
+    ESP_LOGD(TAG, "Periodic full update countdown %" PRIu32 ".", full_update_countdown_);
 
     if (full_update_countdown_ == 0) {
       full_update_countdown_ = this->full_update_every_;
       ESP_LOGD(TAG, "Full update!");
-      
+
       eink_render_advanced(fb, this->cycles_invert_, true);
     }
 
@@ -78,7 +80,7 @@ void LilygoT547Display::power_off() { eink_power_off(); }
 
 void LilygoT547Display::dump_config() {
   LOG_DISPLAY("", "Lilygo T5 47 Display", this);
-  ESP_LOGCONFIG(TAG, "  Full Update Every: %u", this->full_update_every_);
+  ESP_LOGCONFIG(TAG, "  Full Update Every: %" PRIu32, this->full_update_every_);
   LOG_UPDATE_INTERVAL(this);
 }
 
